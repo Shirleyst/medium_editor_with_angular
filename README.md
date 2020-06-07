@@ -10,8 +10,6 @@ This is an AngularJS application with the following:
 
 - LaTex Support (partial, cannot enter text after the Latex equation)
 
-  - works locally but not on Firebase Hosting
-
 ## Installation
 
 Run `npm install` to install all the required dependencies
