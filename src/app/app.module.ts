@@ -16,12 +16,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MediumEditorModule } from 'angular2-medium-editor'
 import { FirebaseService } from './service/firebase.service'
 import { AppComponent } from './app.component';
+import { MathjaxComponent } from './mathjax/mathjax.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    UserComponent
+    UserComponent,
+    MathjaxComponent
   ],
   imports: [
     BrowserModule,
@@ -30,8 +32,7 @@ import { AppComponent } from './app.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    MediumEditorModule,
-
+    MediumEditorModule
   ],
   providers: [FirebaseService, AuthService, UserService, UserResolver, AuthGuard],
   bootstrap: [AppComponent]

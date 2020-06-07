@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, SimpleChanges } from '@angular/core';
 import { UserService } from '../core/user.service';
 import { AuthService } from '../core/auth.service';
 import { ActivatedRoute } from '@angular/router';
@@ -8,6 +8,7 @@ import { FirebaseUserModel } from '../core/user.model';
 import { FirebaseService } from '../service/firebase.service';
 import MediumEditor from 'medium-editor';
 import { Observable } from 'rxjs';
+import { ConfigService } from '../config.service'
 
 const BUTTONS = [
   'bold'
@@ -43,7 +44,8 @@ export class UserComponent implements OnInit {
   user: FirebaseUserModel = new FirebaseUserModel();
   profileForm: FormGroup;
   editor: any;
-  content: Observable<string>;
+  content: string;
+  mathJaxObject;
   @ViewChild('editable') editable: ElementRef;
 
   constructor(
@@ -52,7 +54,8 @@ export class UserComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private fb: FormBuilder,
-    public firebaseService: FirebaseService
+    public firebaseService: FirebaseService,
+    public configServie: ConfigService,
   ) {
 
   }
@@ -69,11 +72,37 @@ export class UserComponent implements OnInit {
     });
   }
 
+  //
+  updateMathObt() {
+    this.mathJaxObject = this.configServie.nativeGlobal()['MathJax'];
+  }
+
+  renderMath() {
+    this.updateMathObt();
+    let angObj = this;
+    setTimeout(() => {
+      angObj.mathJaxObject['Hub'].Queue(["Typeset", angObj.mathJaxObject.Hub], 'mathContent');
+    }, 1000)
+  }
+
+  loadMathConfig() {
+    this.updateMathObt();
+    this.mathJaxObject.Hub.Config({
+      showMathMenu: false,
+      tex2jax: { inlineMath: [["$", "$"]], displayMath: [["$$", "$$"]] },
+      menuSettings: { zoom: "Double-Click", zscale: "150%" },
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG: { linebreaks: { automatic: true } }
+    });
+  }
+
   ngOnInit(): void {
     this.route.data.subscribe(routeData => {
       let data = routeData['data'];
       if (data) {
         this.user = data;
+        this.loadMathConfig();
       }
     })
   }
@@ -122,10 +151,20 @@ export class UserComponent implements OnInit {
     if (this.content) {
       var target = this.editor.elements[0];
       target.innerHTML = this.content;
+      this.renderMath();
     }
     // watch any update and upload changes to firebase
     this.editor.subscribe('editableInput', (event, editable) => {
-      this.firebaseService.syncData(this.user, editable.innerHTML);
+      this.renderMath();
+      // remove span, script used to render math
+      var data = editable.innerHTML;
+      var re1 = /<span.*>(?=(\$))/g
+      var re2 = /<\/span>/g;
+      var re4 = /<script[^>]*>/g
+      data = data.replace(re4, '$').replace(/<\/script><\/p>/g, '$<\/p> <p><br></p><p><br></p>').replace(re1, '')
+      console.log(data);
+      this.firebaseService.syncData(this.user, data);
+      // this.renderMath();
     })
   }
 

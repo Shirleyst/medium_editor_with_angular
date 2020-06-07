@@ -6,6 +6,7 @@ This is an AngularJS application with the following:
 
 - Medium Text Editor (text will be synced to Firebase, and will not lose once logged back in)
 
+- Firebase Hosting (Accessible here: https://pencil-de60b.web.app)
 
 ## Installation
 
