@@ -8,6 +8,8 @@ This is an AngularJS application with the following:
 
 - Firebase Hosting (Accessible here: https://pencil-de60b.web.app)
 
+- LaTex Support (partial)
+
 ## Installation
 
 Run `npm install` to install all the required dependencies
