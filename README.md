@@ -8,7 +8,9 @@ This is an AngularJS application with the following:
 
 - Firebase Hosting (Accessible here: https://pencil-de60b.web.app)
 
-- LaTex Support (partial)
+- LaTex Support (partial, cannot enter text after the Latex equation)
+
+  - works locally but not on Firebase Hosting
 
 ## Installation
 
