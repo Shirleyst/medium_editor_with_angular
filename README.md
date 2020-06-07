@@ -6,6 +6,14 @@ This is an AngularJS application with the following:
 
 - Medium Text Editor (text will be synced to Firebase, and will not lose once logged back in)
 
+- Firebase Hosting (Accessible here: https://pencil-de60b.web.app)
+
+- Note: 
+
+  - master branch: no Latex Support
+  
+  - latex branch: with Latex Support (firebase deployed with this branch)
+
 
 ## Installation
 
